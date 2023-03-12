@@ -12,6 +12,38 @@ RED="\033[1m\033[0;31m"
 YELLOW="\033[1;33m"
 RESET="\033[0m"
 
+if [[ "$1" == "--yes-all" ]]; then
+  YES_ALL=1
+fi
+
+function ask_yes_no() {
+  local question=$1
+  local default=$2
+
+  if [[ $YES_ALL -eq 1 ]]; then
+    return 0
+  fi
+
+  while true; do
+    read -p "$question [y/n]: " yn
+    case $yn in
+      [Yy]*)
+        return 0
+        ;;
+      [Nn]*)
+        return 1
+        ;;
+      *)
+        if [[ $default == "y" ]]; then
+          return 0
+        else
+          return 1
+        fi
+        ;;
+    esac
+  done
+}
+
 install() {
   src_path=$1
   dst_path=$2
@@ -58,14 +90,12 @@ asdf_install() {
 
   if ! command -v asdf &> /dev/null; then
     echo -e "\n${RED}[*] NOT INSTALLED${RESET}\n"
-    read -p "Would you like to install asdf? (y/n): " choice
-    case "$choice" in
-      y | Y)
-        git clone https://github.com/asdf-vm/asdf.git $ASDF_DIR --branch $ASDF_VERSION || exit 1
-        ;;
-      *) ;;
 
-    esac
+    ask_yes_no "Would you like to install asdf?" "y"
+
+    if [[ $? -eq 0 ]]; then
+      git clone https://github.com/asdf-vm/asdf.git $ASDF_DIR --branch $ASDF_VERSION || exit 1
+    fi
   else
     echo -e "${GREEN}INSTALLED${RESET}"
   fi
@@ -76,14 +106,12 @@ omz_install() {
 
   if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo -e "\n${RED}[*] NOT INSTALLED${RESET}\n"
-    read -p "Would you like to install oh-my-zsh? (y/n): " choice
-    case "$choice" in
-      y | Y)
-        git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh || exit 1
-        ;;
-      *) ;;
 
-    esac
+    ask_yes_no "Would you like to install oh-my-zsh?" "y"
+
+    if [[ $? -eq 0 ]]; then
+      git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh || exit 1
+    fi
   else
     echo -e "${GREEN}INSTALLED${RESET}"
   fi

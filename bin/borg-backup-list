@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+usage() {
+  cat << EOF
+
+List the backups in the repository.
+
+Options:
+  -h, --help          Display this help and exit.
+EOF
+}
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
+# Check if the required config variables are defined.
+if [ -z "$BORG_REPOSITORY" ]; then
+  echo "The BORG_REPOSITORY variable is not defined!"
+  exit 1
+fi
+
+if [ -z "$BORG_BACKUP_PREFIX" ]; then
+  BORG_BACKUP_PREFIX="$USER@$HOSTNAME"
+fi
+
+if [ -z "$BORG_PASSPHRASE" ]; then
+  read -s -p 'Enter repository password: ' BORG_PASSPHRASE
+  echo ''
+fi
+
+echo ""
+echo "Listing backups in $BORG_REPOSITORY..."
+echo ""
+
+BORG_PASSPHRASE="$BORG_PASSPHRASE" \
+  borg list "$BORG_REPOSITORY" \
+  --glob-archives "$BORG_BACKUP_PREFIX-*" \
+  --format "{archive}{TAB}{time}{NL}"
+  
+

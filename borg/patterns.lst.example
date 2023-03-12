@@ -1,0 +1,8 @@
+P fm
+- home/*/Downloads
+- home/*/.*/*
++ home/*/.zsh_history
++ home/*/.bash_history
++ home/*/.ssh/*
+
+# vi: ft=gitignore

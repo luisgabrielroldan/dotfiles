@@ -1,0 +1,22 @@
+# Private bin folder
+bin_private/*
+
+# Zsh
+zsh/private/*
+
+# Nvim
+nvim/private.vim
+
+nvim/pack
+
+nvim/plugged/*
+!nvim/plugged/.gitkeep
+
+nvim/sessions/*
+!nvim/sessions/.gitkeep
+
+# i3
+i3/conf.d/private.conf
+
+# borg
+borg/patterns.lst

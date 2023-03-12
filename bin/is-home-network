@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+usage() {
+  cat << EOF
+This is a Bash script that checks if the computer is connected to the home
+network by comparing the MAC address of the router with the environment
+variable HOME_ROUTER_MAC.
+
+Options:
+  -h, --help          Display this help and exit.
+EOF
+}
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
+if [ -z "$HOME_ROUTER_MAC" ]; then
+  echo "The HOME_ROUTER_MAC variable is not defined!"
+  exit 1
+fi
+
+arp -n | grep -i "$HOME_ROUTER_MAC" > /dev/null
+
+if [ $? -eq 0 ]; then
+  echo "Home network detected!"
+  exit 0
+else
+  echo "Not home network!"
+  exit 1
+fi

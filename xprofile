@@ -1,0 +1,8 @@
+#!/bin/sh
+
+export EDITOR="$(which nvim)"
+export VISUAL="$EDITOR"
+
+export BROWSER=/usr/bin/google-chrome-stable
+export TERMINAL=/usr/bin/alacritty
+export SSH_ASKPASS=/usr/lib/seahorse/ssh-askpass

@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+usage() {
+  cat << EOF
+
+This is a Bash script that uses BorgBackup to create and prune backups. It
+checks for required configuration variables and excludes specific files and
+directories from the backup. The script prompts for a password if not defined
+and creates a backup with progress and statistics options. Finally, the script
+prunes the repository according to a specified retention policy.
+
+There are three external Bash variables used in this script:
+
+  BORG_REPOSITORY     The path to the BorgBackup repository. It can be a local
+                      directory or a remote server.
+
+  BORG_BACKUP_PREFIX  A prefix for the backup archive's name. It defaults to
+                      the username and hostname if not defined.
+
+  BORG_PASSPHRASE     The passphrase used to encrypt the backup. If not defined,
+                      the script will prompt the user to enter it.
+
+Options:
+  -h, --help          Display this help and exit.
+EOF
+}
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
+# Set the path to the borg config file.
+BORG_CONFIG_PATH="$HOME/.config/borg"
+
+# Check if the required config variables are defined.
+if [ -z "$BORG_REPOSITORY" ]; then
+  echo "The BORG_REPOSITORY variable is not defined!"
+  exit 1
+fi
+
+if [ -z "$BORG_BACKUP_PREFIX" ]; then
+  BORG_BACKUP_PREFIX="$USER@$HOSTNAME"
+fi
+
+if [ -z "$BORG_PASSPHRASE" ]; then
+  read -s -p 'Enter repository password: ' BORG_PASSPHRASE
+  echo ''
+fi
+
+#Bail if borg is already running, maybe previous run didn't finish
+if pidof -x borg >/dev/null; then
+    echo "Backup already running"
+    exit
+fi
+
+# Create the backup.
+# The --progress option shows a progress bar.
+# The --stats option shows some statistics about the backup.
+# The --exclude-caches option excludes directories that are used for caching.
+# The --exclude-nodump option excludes files that are marked as nodump.
+# The --patterns-from option reads the patterns from the given file.
+BORG_PASSPHRASE="$BORG_PASSPHRASE" \
+  borg create -v \
+  --progress \
+  --stats \
+  --exclude-caches \
+  --exclude-nodump	\
+  --patterns-from="$BORG_CONFIG_PATH/patterns.lst" \
+  "$BORG_REPOSITORY::$BORG_BACKUP_PREFIX-{now:%Y-%m-%d}" \
+  "$HOME" \
+  || exit 1
+
+# Prune the repository.
+# Keep the last 7 daily, 4 weekly and 6 monthly backups.
+# The --prefix option is used to only prune archives with the given prefix.
+BORG_PASSPHRASE="$BORG_PASSPHRASE" \
+  borg prune -v --list "$BORG_REPOSITORY" --prefix "$BORG_BACKUP_PREFIX-" \
+  --keep-daily=7 \
+  --keep-weekly=4 \
+  --keep-monthly=6

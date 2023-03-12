@@ -101,19 +101,27 @@ asdf_install() {
   fi
 }
 
+install_extra_omz_plugins() {
+  echo -e "${BLUE}[*] Installing extra plugins...${RESET}"
+
+  if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions -~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+  fi
+}
+
 omz_install() {
   echo -e -n "${BLUE}[*] Checking oh-my-zsh...${RESET}"
 
   if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    echo -e "\n${RED}[*] NOT INSTALLED${RESET}\n"
+    git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
 
-    ask_yes_no "Would you like to install oh-my-zsh?" "y"
-
-    if [[ $? -eq 0 ]]; then
-      git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh || exit 1
+    if [[ $? -ne 0 ]]; then
+      exit 1
     fi
-  else
+
     echo -e "${GREEN}INSTALLED${RESET}"
+  else
+    echo -e "${GREEN}ALREADY INSTALLED${RESET}"
   fi
 }
 
@@ -142,6 +150,8 @@ create_private_directories() {
 asdf_install
 
 omz_install
+
+install_extra_omz_plugins
 
 echo -e "${BLUE}[*] Creating private directories...${RESET}"
 create_private_directories

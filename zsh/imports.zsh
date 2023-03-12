@@ -15,7 +15,6 @@ if [[ -d "/usr/share/fzf" ]]; then
   source /usr/share/fzf/fzf-extras.zsh
 fi
 
-
 ################################################
 ## ASDF config
 ################################################
@@ -32,7 +31,6 @@ if [[ -f "/usr/share/LS_COLORS/dircolors.sh" ]]; then
   source /usr/share/LS_COLORS/dircolors.sh
 fi
 
-
 ################################################
 ## Load private scripts
 ################################################
@@ -44,5 +42,3 @@ for file in $(ls -1 "$PRIVATE_ZSH_FOLDER" | sort); do
     source "$PRIVATE_ZSH_FOLDER/$file"
   fi
 done
-
-

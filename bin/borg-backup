@@ -48,9 +48,9 @@ if [ -z "$BORG_PASSPHRASE" ]; then
 fi
 
 #Bail if borg is already running, maybe previous run didn't finish
-if pidof -x borg >/dev/null; then
-    echo "Backup already running"
-    exit
+if pidof -x borg > /dev/null; then
+  echo "Backup already running"
+  exit
 fi
 
 # Create the backup.
@@ -64,7 +64,7 @@ BORG_PASSPHRASE="$BORG_PASSPHRASE" \
   --progress \
   --stats \
   --exclude-caches \
-  --exclude-nodump	\
+  --exclude-nodump \
   --patterns-from="$BORG_CONFIG_PATH/patterns.lst" \
   "$BORG_REPOSITORY::$BORG_BACKUP_PREFIX-{now:%Y-%m-%d}" \
   "$HOME" \

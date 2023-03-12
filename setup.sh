@@ -59,11 +59,11 @@ asdf_install() {
     echo -e "\n${RED}[*] NOT INSTALLED${RESET}\n"
     read -p "Would you like to install asdf? (y/n): " choice
     case "$choice" in
-      y|Y )
+      y | Y)
         git clone https://github.com/asdf-vm/asdf.git $ASDF_DIR --branch $ASDF_VERSION || exit 1
         ;;
-      * )
-        ;;
+      *) ;;
+
     esac
   else
     echo -e "${GREEN}INSTALLED${RESET}"
@@ -77,11 +77,11 @@ omz_install() {
     echo -e "\n${RED}[*] NOT INSTALLED${RESET}\n"
     read -p "Would you like to install oh-my-zsh? (y/n): " choice
     case "$choice" in
-      y|Y )
+      y | Y)
         git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh || exit 1
         ;;
-      * )
-        ;;
+      *) ;;
+
     esac
   else
     echo -e "${GREEN}INSTALLED${RESET}"
@@ -117,12 +117,9 @@ omz_install
 echo -e "${BLUE}[*] Creating private directories...${RESET}"
 create_private_directories
 
-
 echo -e "${BLUE}[*] Installing dotfiles...${RESET}"
 if ! install_files; then
   echo -e "${RED}[!] Failed to install${RESET}"
 else
   echo -e "${GREEN}[*] Successfully installed${RESET}"
 fi
-
-

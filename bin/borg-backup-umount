@@ -19,25 +19,23 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
 fi
 
 if [[ "$1" == "-a" || "$1" == "--all" ]]; then
-  MOUNT_POINTS=$(find /tmp -maxdepth 1 -name borg-mount.* -type d ) 
-  
+  MOUNT_POINTS=$(find /tmp -maxdepth 1 -name borg-mount.* -type d)
+
   if [ -z "${MOUNT_POINTS[0]}" ]; then
     echo "No mount points found."
   else
-    for MOUNT_POINT in $MOUNT_POINTS 
-    do
+    for MOUNT_POINT in $MOUNT_POINTS; do
       MOUNT_POINT=$(echo "$MOUNT_POINT" | awk '{print $1}')
-      borg umount "$MOUNT_POINT" 2>/dev/null || true
+      borg umount "$MOUNT_POINT" 2> /dev/null || true
       rm -r "$MOUNT_POINT"
       printf -- '- %s unmounted\n' "$MOUNT_POINT"
     done
   fi
 elif [ ! -z "$1" ]; then
-  borg umount "$1" 2>/dev/null || true
+  borg umount "$1" 2> /dev/null || true
   printf -- '- %s unmounted\n' "$1"
   rmdir "$1"
 else
   usage
   exit 1
 fi
-

@@ -33,13 +33,14 @@ if [ -z "$BORG_PASSPHRASE" ]; then
   echo ''
 fi
 
-BACKUP=$(BORG_PASSPHRASE="$BORG_PASSPHRASE" \
-  borg list "$BORG_REPOSITORY" \
-  --glob-archives "$BORG_BACKUP_PREFIX-*" \
-  --format "{archive}{TAB}{TAB}{TAB}{time:%Y-%m-%d %H:%M}{NL}" \
-  | fzf \
-  --ansi \
-  --header 'Select backup to mount:'
+BACKUP=$(
+  BORG_PASSPHRASE="$BORG_PASSPHRASE" \
+    borg list "$BORG_REPOSITORY" \
+    --glob-archives "$BORG_BACKUP_PREFIX-*" \
+    --format "{archive}{TAB}{TAB}{TAB}{time:%Y-%m-%d %H:%M}{NL}" \
+    | fzf \
+      --ansi \
+      --header 'Select backup to mount:'
 )
 
 if [ ! -z "$BACKUP" ]; then
@@ -64,5 +65,3 @@ if [ ! -z "$BACKUP" ]; then
     fi
   fi
 fi
-
-

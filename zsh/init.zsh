@@ -6,5 +6,5 @@
 
 # If you have a ~/.bash_profile file, source it.
 if [ -f ~/.bash_profile ]; then
-    . ~/.bash_profile;
+  . ~/.bash_profile
 fi

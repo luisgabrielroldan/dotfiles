@@ -8,7 +8,6 @@
 unset -f v
 alias v="$EDITOR"
 
-
 alias c="clear"
 alias cdd="cd ~/Dev"
 
@@ -30,4 +29,3 @@ alias nvpnc="nordvpn connect"
 alias nvpnd="nordvpn disconnect"
 alias nvpndnshome="nordvpn set dns 192.168.10.8"
 alias nvpndnsoff="nordvpn set dns off"
-

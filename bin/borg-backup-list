@@ -37,5 +37,3 @@ BORG_PASSPHRASE="$BORG_PASSPHRASE" \
   borg list "$BORG_REPOSITORY" \
   --glob-archives "$BORG_BACKUP_PREFIX-*" \
   --format "{archive}{TAB}{time}{NL}"
-  
-

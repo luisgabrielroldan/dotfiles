@@ -13,4 +13,3 @@ if [[ -e "/usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme" ]]; then
 else
   echo -e "\033[1;33mWARNING: Powerlevel10k is not detected!\033[0m"
 fi
-

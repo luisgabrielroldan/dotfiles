@@ -4,7 +4,6 @@
 ## This file contains helper functions for use in other scripts.
 ##
 
-
 make-script() {
   # Check if the language and filename are provided
   if [ -z "$1" ] || [ -z "$2" ]; then
@@ -29,6 +28,7 @@ make-script() {
     *)
       echo "Invalid language: $1"
       return 1
+      ;;
   esac
 
   # Create the script file with the specified shebang line
@@ -112,11 +112,11 @@ is_in_git_repo() {
 # the branch name manually.
 
 function fzfgb() {
-  is_in_git_repo &&
-    gb --all --color=always |
-    awk '{ printf("\033[36m%s\033[0m ", $1); if ($2 == "*") { printf("\033[32m%s\033[0m ", "●"); } else { printf("%s ", " "); } printf("\033[33m%s\033[0m ", substr($3, 1, 2)); for(i=4;i<=NF;++i) printf("%s ", $i); print "" }' |
-    fzf --height 40% --ansi --multi --tac | sed 's/^..//' | awk '{print $1}' |
-    sed 's#^remotes/[^/]*/##'
+  is_in_git_repo \
+    && gb --all --color=always \
+    | awk '{ printf("\033[36m%s\033[0m ", $1); if ($2 == "*") { printf("\033[32m%s\033[0m ", "●"); } else { printf("%s ", " "); } printf("\033[33m%s\033[0m ", substr($3, 1, 2)); for(i=4;i<=NF;++i) printf("%s ", $i); print "" }' \
+      | fzf --height 40% --ansi --multi --tac | sed 's/^..//' | awk '{print $1}' \
+      | sed 's#^remotes/[^/]*/##'
 }
 
 zle -N fzfgb
@@ -129,7 +129,7 @@ function timezone-dyn-update() {
   local custom_url="${1:-$ipapi_url}"
 
   local timezone
-  timezone="$(curl --fail "$custom_url" 2>/dev/null)"
+  timezone="$(curl --fail "$custom_url" 2> /dev/null)"
   if [ $? -ne 0 ] || [ -z "$timezone" ]; then
     echo "Failed to retrieve timezone" >&2
     return 1

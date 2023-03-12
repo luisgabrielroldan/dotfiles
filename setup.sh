@@ -105,7 +105,7 @@ install_extra_omz_plugins() {
   echo -e "${BLUE}[*] Installing extra plugins...${RESET}"
 
   if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions -~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
   fi
 }
 

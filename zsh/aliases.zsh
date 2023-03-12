@@ -5,7 +5,6 @@
 ##
 
 # Unsets the v function created by fzf-extras
-unset -f v
 alias v="$EDITOR"
 
 alias c="clear"

@@ -66,7 +66,7 @@ BORG_PASSPHRASE="$BORG_PASSPHRASE" \
   --exclude-caches \
   --exclude-nodump \
   --patterns-from="$BORG_CONFIG_PATH/patterns.lst" \
-  "$BORG_REPOSITORY::$BORG_BACKUP_PREFIX-{now:%Y-%m-%d}" \
+  "$BORG_REPOSITORY::$BORG_BACKUP_PREFIX-{now:%Y-%m-%d--%H%M%S}" \
   "$HOME" \
   || exit 1
 
@@ -74,7 +74,10 @@ BORG_PASSPHRASE="$BORG_PASSPHRASE" \
 # Keep the last 7 daily, 4 weekly and 6 monthly backups.
 # The --prefix option is used to only prune archives with the given prefix.
 BORG_PASSPHRASE="$BORG_PASSPHRASE" \
-  borg prune -v --list "$BORG_REPOSITORY" --prefix "$BORG_BACKUP_PREFIX-" \
+  borg prune -v \
+  --list "$BORG_REPOSITORY" \
+  --glob-archives "$BORG_BACKUP_PREFIX-*" \
   --keep-daily=7 \
   --keep-weekly=4 \
   --keep-monthly=6
+

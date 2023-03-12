@@ -88,7 +88,7 @@ install_files() {
 asdf_install() {
   echo -e -n "${BLUE}[*] Checking asdf...${RESET}"
 
-  if ! command -v asdf &> /dev/null; then
+  if [ ! -d "$HOME/.asdf" ]; then
     echo -e "\n${RED}[*] NOT INSTALLED${RESET}\n"
 
     ask_yes_no "Would you like to install asdf?" "y"

@@ -5,9 +5,10 @@ ASDF_VERSION="v0.11.2"
 
 SRC_DIR=$(dirname "$(realpath -s "$0")")
 
+BLUE="\033[1;34m"
+GRAY="\033[1;30m"
 GREEN="\033[1m\033[1;32m"
 RED="\033[1m\033[0;31m"
-BLUE="\033[1;34m"
 YELLOW="\033[1;33m"
 RESET="\033[0m"
 
@@ -15,7 +16,7 @@ install() {
   src_path=$1
   dst_path=$2
 
-  echo -n "    $dst_path "
+  echo -n -e "    ${GRAY}$dst_path${RESET} "
 
   if [ -L "$dst_path" ]; then
     rm "$dst_path"
@@ -89,7 +90,7 @@ omz_install() {
 }
 
 create_directory() {
-  echo -n "    $1 "
+  echo -n -e "    ${GRAY}$1${RESET} "
 
   if [ ! -d "$1" ]; then
     if ! mkdir -p "$1"; then
